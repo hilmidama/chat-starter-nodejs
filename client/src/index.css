@@ -6,6 +6,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  position: relative;
 }
 
 code {
@@ -13,33 +14,18 @@ code {
     monospace;
 }
 
-#bg {
-  width: 100%;
-  padding: 0;
-  margin: 0;
-  display:block;
-  z-index: 1;
-}
-
-.wrap {
-  position:relative;
-}
-
-.wrap:before {
-  content:"";
-  position: absolute;
-  top:0;
-  left:0;
-  height:100%;
-  width:100%;
-  /* background: #000; */
-  background: linear-gradient(180deg, #3A8DFF 0%, #86B9FF 100%);
-  z-index:2;
-  opacity: 85%;
-}
-
 #chatbubble{
     height: fit-content;
     object-fit: contain;  
 }
 
+#float{
+  z-index: 1;
+  position: fixed;
+  top: 20px;
+  height: 100px;
+  padding: 0;
+  float: left;
+  display: flex;
+  justify-content: flex-end;
+}

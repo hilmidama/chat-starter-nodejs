@@ -30,7 +30,6 @@ const Messages = (props) => {
     socket.on("read-message", readMessage)
   }
   const readMessage = useCallback((data) => {
-    console.log("from messages",data)
   })
   useEffect(() => {
     readConversation()

@@ -37,14 +37,34 @@ const Signup = ({ user, register }) => {
 
   return (
     <Grid container justifyContent="center">
-      <Box>
-        <Grid container item>
-          <Typography>Need to log in?</Typography>
-          <Link href="/login" to="/login">
-            <Button>Login</Button>
-          </Link>
-        </Grid>
+      <Grid item xs={5} spacing={0}>
+        <img id="chatbubble" src="/img/sidebanner.svg"></img>
+      </Grid>
+      <Grid
+        container
+        item
+        xs={7}
+        direction="column"
+        justifyContent="center"
+        alignItems="center"
+      >
+        <div id="float">
+          <Grid container item justifyContent="space-between">
+            <Grid>
+              <Typography>Already have an account?</Typography>
+            </Grid>
+            <Grid>
+              <Link href="/login" to="/login">
+                <Button color="primary" variant="outlined">
+                  Login
+                </Button>
+              </Link>
+            </Grid>
+          </Grid>
+        </div>
+
         <form onSubmit={handleRegister}>
+          <h1> Create an account.</h1>
           <Grid>
             <Grid>
               <FormControl>
@@ -98,12 +118,19 @@ const Signup = ({ user, register }) => {
                 </FormHelperText>
               </FormControl>
             </Grid>
-            <Button type="submit" variant="contained" size="large">
-              Create
-            </Button>
+            <Grid>
+              <Button
+                color="primary"
+                type="submit"
+                variant="contained"
+                size="large"
+              >
+                Create
+              </Button>
+            </Grid>
           </Grid>
         </form>
-      </Box>
+      </Grid>
     </Grid>
   );
 };
