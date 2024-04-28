@@ -41,11 +41,20 @@ io.on("connection", (socket) => {
   });
 
   socket.on("new-message", (data) => {
+    console.log("online user", onlineUsers)
     socket.broadcast.emit("new-message", {
       message: data.message,
       sender: data.sender,
     });
   });
+
+  socket.on("read-message", (data) => {
+    socket.broadcast.emit("read-message", {
+      message: data.message,
+      sender: data.sender,
+      conversationId: data.conversationId
+    });
+  })
 
   socket.on("logout", (id) => {
     if (onlineUsers.includes(id)) {

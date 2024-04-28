@@ -20,7 +20,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+
 const ChatContent = ({ conversation }) => {
+
   const classes = useStyles();
 
   const { otherUser } = conversation;

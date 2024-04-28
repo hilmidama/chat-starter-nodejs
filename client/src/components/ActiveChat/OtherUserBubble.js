@@ -1,6 +1,6 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import { Box, Typography, Avatar } from "@material-ui/core";
+import { Box, Typography, Avatar, Grid } from "@material-ui/core";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -29,6 +29,12 @@ const useStyles = makeStyles(() => ({
     letterSpacing: -0.2,
     padding: 8,
   },
+  // status: {
+  //   fontSize: 10,
+  //   color: "#00000",
+  //   letterSpacing: -0.2,
+  //   padding: 8,
+  // },
 }));
 
 const OtherUserBubble = ({ text, time, otherUser }) => {
@@ -45,9 +51,9 @@ const OtherUserBubble = ({ text, time, otherUser }) => {
         <Typography className={classes.usernameDate}>
           {otherUser.username} {time}
         </Typography>
-        <Box className={classes.bubble}>
-          <Typography className={classes.text}>{text}</Typography>
-        </Box>
+          <Box className={classes.bubble}>
+            <Typography className={classes.text}>{text}</Typography>
+          </Box>
       </Box>
     </Box>
   );

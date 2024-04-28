@@ -1,5 +1,5 @@
 import React from "react";
-import { Box } from "@material-ui/core";
+import { Box, Badge, Grid } from "@material-ui/core";
 import { BadgeAvatar, ChatContent } from "../Sidebar";
 import { makeStyles } from "@material-ui/core/styles";
 
@@ -22,18 +22,23 @@ const Chat = ({ conversation, setActiveChat }) => {
   const { otherUser } = conversation;
 
   const handleClick = async (conversation) => {
+    conversation.unread = 0
     await setActiveChat(conversation.otherUser.username);
   };
 
   return (
     <Box onClick={() => handleClick(conversation)} className={classes.root}>
-      <BadgeAvatar
-        photoUrl={otherUser.photoUrl}
-        username={otherUser.username}
-        online={otherUser.online}
-        sidebar={true}
-      />
-      <ChatContent conversation={conversation} />
+      <Grid container item alignItems="center">
+        <BadgeAvatar
+          photoUrl={otherUser.photoUrl}
+          username={otherUser.username}
+          online={otherUser.online}
+          sidebar={true}
+        />
+        <ChatContent conversation={conversation} />
+
+        <Badge color="primary" badgeContent={conversation.unread} />
+      </Grid>
     </Box>
   );
 };

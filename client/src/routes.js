@@ -20,6 +20,10 @@ const Routes = (props) => {
       const { data } = await axios.post("/auth/login", credentials);
       await localStorage.setItem("messenger-token", data.token);
       setUser(data);
+
+
+      
+
       socket.emit("go-online", data.id);
     } catch (error) {
       console.error(error);

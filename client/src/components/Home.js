@@ -25,7 +25,8 @@ const Home = ({ user, logout }) => {
   const classes = useStyles();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  const addSearchedUsers = (users) => {
+  const addSearchedUsers = async (users) => {
+    // await fetchConversations()
     const currentUsers = {};
 
     // make table of current users so we can lookup faster
@@ -41,7 +42,6 @@ const Home = ({ user, logout }) => {
         newState.push(fakeConvo);
       }
     });
-
     setConversations(newState);
   };
 
@@ -57,15 +57,13 @@ const Home = ({ user, logout }) => {
   const sendMessage = (data, body) => {
     socket.emit("new-message", {
       message: data.message,
-      recipientId: body.recipientId,
       sender: data.sender,
     });
   };
 
-  const postMessage = (body) => {
+  const postMessage = async (body) => {
     try {
-      const data = saveMessage(body);
-
+      const data = await saveMessage(body);
       if (!body.conversationId) {
         addNewConvo(body.recipientId, data.message);
       } else {
@@ -97,19 +95,27 @@ const Home = ({ user, logout }) => {
       // if sender isn't null, that means the message needs to be put in a brand new convo
       const { message, sender = null } = data;
       if (sender !== null) {
-        const newConvo = {
+        let newConvo = {
           id: message.conversationId,
           otherUser: sender,
           messages: [message],
+          messageStatus: 1,
         };
         newConvo.latestMessageText = message.text;
-        setConversations((prev) => [newConvo, ...prev]);
+        try {
+          setConversations((prev) => [newConvo, ...prev]);
+        } catch (err) {
+          console.log("err", err);
+        }
       }
 
       conversations.forEach((convo) => {
         if (convo.id === message.conversationId) {
           convo.messages.push(message);
           convo.latestMessageText = message.text;
+          if (sender.id != user.id) {
+            convo.unread += 1;
+          }
         }
       });
       setConversations(conversations);
@@ -149,6 +155,23 @@ const Home = ({ user, logout }) => {
     );
   }, []);
 
+  const readMessage = useCallback((data) => {
+    //read message
+    data.message.map((message) => {
+      if (message.senderId == user.id) message.messageStatus = 2;
+    });
+
+    conversations.map((conversation) => {
+      if (conversation.id == data.conversationId) {
+        conversation?.messages?.map((message) => {
+          if (message.senderId == user.id) message.messageStatus = 2;
+        });
+      }
+    });
+
+    setConversations(conversations);
+  });
+
   // Lifecycle
 
   useEffect(() => {
@@ -156,6 +179,7 @@ const Home = ({ user, logout }) => {
     socket.on("add-online-user", addOnlineUser);
     socket.on("remove-offline-user", removeOfflineUser);
     socket.on("new-message", addMessageToConversation);
+    socket.on("read-message", readMessage);
 
     return () => {
       // before the component is destroyed
@@ -163,8 +187,15 @@ const Home = ({ user, logout }) => {
       socket.off("add-online-user", addOnlineUser);
       socket.off("remove-offline-user", removeOfflineUser);
       socket.off("new-message", addMessageToConversation);
+      socket.off("read-message", readMessage);
     };
-  }, [addMessageToConversation, addOnlineUser, removeOfflineUser, socket]);
+  }, [
+    addMessageToConversation,
+    addOnlineUser,
+    removeOfflineUser,
+    readMessage,
+    socket,
+  ]);
 
   useEffect(() => {
     // when fetching, prevent redirect

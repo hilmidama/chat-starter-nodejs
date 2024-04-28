@@ -5,7 +5,7 @@ import { makeStyles } from "@material-ui/core/styles";
 const useStyles = makeStyles(() => ({
   root: {
     justifySelf: "flex-end",
-    marginTop: 15,
+    marginTop: 0,
   },
   input: {
     height: 70,
@@ -31,8 +31,8 @@ const Input = ({ otherUser, conversationId, user, postMessage }) => {
     const reqBody = {
       text: formElements.text.value,
       recipientId: otherUser.id,
-      conversationId,
-      sender: conversationId ? null : user,
+      conversationId: conversationId,
+      sender: conversationId ? user : null,
     };
     await postMessage(reqBody);
     setText("");
